@@ -21,7 +21,5 @@ app.get("/", (req: Request, res: Response) => {
 
 const PORTA = PORT || 8080;
 app.listen(PORTA, () => {
-  console.log(
-    `Servidor executando na porta ${PORTA}! http://localhost:${PORTA}`
-  );
+  console.log(`Servidor executando na porta ${PORTA}! http://localhost:${PORTA}`);
 });

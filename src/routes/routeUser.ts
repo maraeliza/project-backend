@@ -35,11 +35,12 @@ router.get("/", verifyJWT, (req: Request, res: Response) => {
 router.post("/register", async (req: Request, res: Response): Promise<any> => {
   const user = req.body;
   try {
-    console.log(user);
+    
     var usuario = new User(user);
     var userRegistered = await usuario.register();
 
     if (userRegistered) {
+      console.log("Usuario registrado com sucesso! ")
       return res.status(201).json({ message: "Usuário criado", user });
     } else {
       return res
