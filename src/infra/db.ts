@@ -12,7 +12,6 @@ const DATABASE = process.env.DATABASE;
 export default class Database {
   private conexao: mysql.Connection | null = null; // Certifique-se de usar 'mysql2.Connection'
 
-  // Método para inicializar a conexão
   public async getConexao(): Promise<mysql.Connection> {
     if (!this.conexao) {
       this.conexao = await mysql.createConnection({

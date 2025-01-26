@@ -1,5 +1,9 @@
 import express, { Request, Response } from "express";
+
+import countryRoutes from "./routes/routeCountry";
+import planRoutes from "./routes/routePlan";
 import userRoutes from "./routes/routeUser";
+import tenantRoutes from "./routes/routeTenant";
 import path from "path";
 
 const envPath = path.resolve(__dirname, "../.env");
@@ -12,7 +16,11 @@ const cors = require("cors");
 const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
+
+app.use("/countries", countryRoutes);
 app.use("/users", userRoutes);
+app.use("/plans", planRoutes);
+app.use("/tenants", tenantRoutes);
 
 // Rota GET para a raiz
 app.get("/", (req: Request, res: Response) => {
@@ -21,5 +29,7 @@ app.get("/", (req: Request, res: Response) => {
 
 const PORTA = PORT || 8080;
 app.listen(PORTA, () => {
-  console.log(`Servidor executando na porta ${PORTA}! http://localhost:${PORTA}`);
+  console.log(
+    `Servidor executando na porta ${PORTA}! http://localhost:${PORTA}`
+  );
 });

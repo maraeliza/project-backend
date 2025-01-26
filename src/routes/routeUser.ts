@@ -1,9 +1,8 @@
 import { Router, Request, Response } from "express";
-import User from "../user/userModel";
-import UserRepository from "../user/userRepository";
+import User from "../components/user/userModel";
+import UserRepository from "../components/user/userRepository";
 
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
 const path = require("path");
 
 const router = Router();
@@ -14,7 +13,7 @@ const SECRET = process.env.SECRET_KEY_JWT;
 
 const verifyJWT=async(req:any, res:Response, next:Function)=>{
   const token = req.headers['x-access-token'];  
-  console.log(token)
+
   jwt.verify(token, SECRET, (err: any, decoded: any) => {
     if(err){
       console.log(err);
@@ -35,8 +34,9 @@ router.get("/", verifyJWT, (req: Request, res: Response) => {
 router.post("/register", async (req: Request, res: Response): Promise<any> => {
   const user = req.body;
   try {
-    
+    console.log("DADOS DO USUARIO A REGISTRAR\n",user)
     var usuario = new User(user);
+    
     var userRegistered = await usuario.register();
 
     if (userRegistered) {

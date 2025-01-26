@@ -1,4 +1,4 @@
-const validate = require("../validation/validate");
+const validate = require("../../validation/validate");
 import UserRepository, { UserRepositoryInterface } from "./userRepository";
 
 export type UserInterface = User;

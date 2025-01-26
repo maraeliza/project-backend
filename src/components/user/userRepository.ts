@@ -1,6 +1,6 @@
 import { Connection, RowDataPacket } from "mysql2/promise";
 import { UserAuth, UserInterface } from "./userModel";
-import DB from "../infra/db";
+import DB from "../../infra/db";
 
 export type UserRepositoryInterface = UserRepository;
 
@@ -31,17 +31,19 @@ export default class UserRepository {
   }
 
   async insertUserBanco(user: UserInterface): Promise<boolean> {
+    console.log("inserindo no banco")
     const isRegistered = await this.isUserRegistered(
       user.getCpf(),
       user.getEmail()
     );
     if (isRegistered) {
+      console.log("usuário já existente")
       return false;
     }
 
     try {
       const query =
-        "INSERT INTO tb_usuarios (cpf, email, nome, cnpj, senha) VALUES (?, ?, ?, ?,?)";
+        "INSERT INTO tb_users (cpf, email, nome, cnpj, senha) VALUES (?, ?, ?, ?,?)";
       const conexao = await this.getConexao();
       await conexao.query(query, [
         user.getCpf(),
@@ -59,7 +61,7 @@ export default class UserRepository {
 
   async selectUserByID(id: number): Promise<UserInterface[]> {
     try {
-      const query = "SELECT * FROM tb_usuarios where id = ?";
+      const query = "SELECT * FROM tb_users where id = ?";
       const conexao = await this.getConexao();
       const [rows] = await conexao.query(query, [id]);
       return rows as UserInterface[];
@@ -71,7 +73,7 @@ export default class UserRepository {
 
   async isUserRegistered(cpf: number, email: string): Promise<boolean> {
     try {
-      const query = "SELECT * FROM tb_usuarios WHERE cpf = ? OR email = ?";
+      const query = "SELECT * FROM tb_users WHERE cpf = ? OR email = ?";
       const conexao = await new DB().getConexao();
       const [result] = await conexao.query(query, [cpf, email]);
 
@@ -83,15 +85,12 @@ export default class UserRepository {
   }
   static async selectIDFromUser(cpf: number, cnpj: number): Promise<number> {
     try {
-      const query = "SELECT * FROM tb_usuarios WHERE cpf = ? AND cnpj = ?";
+      const query = "SELECT * FROM tb_users WHERE cpf = ? AND cnpj = ?";
       const conexao = await new DB().getConexao();
       const [results]: [RowDataPacket[], any] = await conexao.query(query, [
         cpf,
         cnpj,
       ]);
-
-      console.log("Resultado pego do banco:");
-
       if (results.length > 0) {
         const result = results[0]; // Primeiro elemento do array
         if (result.id != null) {
@@ -112,7 +111,7 @@ export default class UserRepository {
   public async findUser(user: UserAuth): Promise<boolean> {
     try {
       const query =
-        "SELECT * FROM tb_usuarios WHERE cpf = ? AND senha = ? and cnpj = ?";
+        "SELECT * FROM tb_users WHERE cpf = ? AND senha = ? and cnpj = ?";
       const conexao = await new DB().getConexao();
       const [result] = await conexao.query(query, [
         user.cpf,
