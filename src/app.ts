@@ -4,6 +4,8 @@ import countryRoutes from "./routes/routeCountry";
 import planRoutes from "./routes/routePlan";
 import userRoutes from "./routes/routeUser";
 import tenantRoutes from "./routes/routeTenant";
+import statusRoutes from "./routes/routeStatus";
+
 import path from "path";
 
 const envPath = path.resolve(__dirname, "../.env");
@@ -21,7 +23,7 @@ app.use("/countries", countryRoutes);
 app.use("/users", userRoutes);
 app.use("/plans", planRoutes);
 app.use("/tenants", tenantRoutes);
-
+app.use("/status", statusRoutes);
 // Rota GET para a raiz
 app.get("/", (req: Request, res: Response) => {
   res.send("GET feito com sucesso!");
