@@ -5,9 +5,10 @@ export type TenantInterface = Tenant;
 export default class Tenant {
   private id: number = 0;
   private planId: number = 0;
+  public plan_id: number = 0;
   private countryId: number = 0;
   private statusId: number = 0;
-  private signature: Date = new Date();
+  public signature: Date = new Date();
   private expiration: Date = new Date();
   private name: string = "";
   private cellphone: string | null = null;

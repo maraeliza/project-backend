@@ -33,6 +33,8 @@ export default class CountryRepository {
       const query = "SELECT * FROM tb_countries WHERE id = ?";
       const conexao = await new DB().getConexao();
       const [rows] = await conexao.query(query, [id]);
+      console.log("PAIS SELECIONADO")
+      console.log(rows)
       return rows as CountryInterface[];
     } catch (err) {
       console.error("Erro ao buscar país:", err);
@@ -123,6 +125,22 @@ export default class CountryRepository {
     }
     return false;
   }
+  async selectNameCountryByID(id: number): Promise<string> {
+      const query = "SELECT name FROM tb_countries WHERE id = ?";
+      try {
+        const conexao = await new DB().getConexao();
+        const [result] = await conexao.query<RowDataPacket[]>(query, [id]);
+  
+        if (result.length > 0) {
+          return result[0].name; 
+        } else {
+          return "N/A"; 
+        }
+      } catch (err) {
+        console.log(err);
+        return "Erro ao buscar nome do país"; 
+      }
+    }
 
   async updateCountry(
     id: number,

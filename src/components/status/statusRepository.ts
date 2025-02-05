@@ -28,7 +28,22 @@ export default class StatusRepository {
       return 0;
     }
   }
-
+  async selectNameStatusByID(id: number): Promise<string> {
+      const query = "SELECT name FROM tb_status WHERE id = ?";
+      try {
+        const conexao = await new DB().getConexao();
+        const [result] = await conexao.query<RowDataPacket[]>(query, [id]);
+  
+        if (result.length > 0) {
+          return result[0].name; 
+        } else {
+          return "N/A"; 
+        }
+      } catch (err) {
+        console.log(err);
+        return "Erro ao buscar nome do plano"; 
+      }
+    }
   // Função para buscar um status pelo ID
   async selectStatusByID(id: number): Promise<StatusInterface[]> {
     try {
@@ -66,7 +81,6 @@ export default class StatusRepository {
     }
   }
 
-  // Função para buscar todos os status
   async selectAllStatuses(): Promise<StatusInterface[]> {
     try {
       const query = "SELECT * FROM tb_status";
@@ -79,7 +93,6 @@ export default class StatusRepository {
     }
   }
 
-  // Função estática para buscar o ID de um status pelo nome
   static async selectIDFromStatus(name: string): Promise<number> {
     try {
       const query = "SELECT * FROM tb_status WHERE name = ?";
@@ -87,7 +100,7 @@ export default class StatusRepository {
       const [results]: [RowDataPacket[], any] = await conexao.query(query, [name]);
 
       if (results.length > 0) {
-        const result = results[0]; // Primeiro elemento do array
+        const result = results[0]; 
         if (result.id != null) {
           return result.id;
         }

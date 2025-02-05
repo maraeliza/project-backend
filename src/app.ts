@@ -24,7 +24,7 @@ app.use("/users", userRoutes);
 app.use("/plans", planRoutes);
 app.use("/tenants", tenantRoutes);
 app.use("/status", statusRoutes);
-// Rota GET para a raiz
+
 app.get("/", (req: Request, res: Response) => {
   res.send("GET feito com sucesso!");
 });

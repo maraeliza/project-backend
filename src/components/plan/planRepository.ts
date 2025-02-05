@@ -1,6 +1,6 @@
-import Plan from "./Plan";
+import Plan, { PlanInterface } from "./Plan";
 import DB from "../../infra/db";
-
+import { RowDataPacket } from "mysql2";
 export interface PlanRepositoryInterface {
   selectAllPlans(): Promise<any>;
   insertPlan(plan: Plan): Promise<number>;
@@ -26,26 +26,47 @@ export default class PlanRepository implements PlanRepositoryInterface {
     const query =
       "INSERT INTO tb_plans (name, description, price) VALUES (?, ?, ?)";
     const conexao = await new DB().getConexao();
-    
+
     const [result] = await conexao.query(query, [
       plan.getName(),
       plan.getDescription(),
       plan.getPrice(),
     ]);
-  
+
     if (result && (result as any).insertId) {
-      return (result as any).insertId; 
+      return (result as any).insertId;
     } else {
-      return 0;  
+      return 0;
     }
   }
-  
 
-  async selectPlanByID(id: number): Promise<any> {
+  async selectPlanByID(id: number): Promise<PlanInterface[]> {
     const query = "SELECT * FROM tb_plans WHERE id = ?";
-    const conexao = await new DB().getConexao();
-    const [result] = await conexao.query(query, [id]);
-    return [result][0];
+    try {
+      const conexao = await new DB().getConexao();
+      const [result] = await conexao.query(query, [id]);
+      console.log(result);
+      return result as PlanInterface[];
+    } catch (err) {
+      console.log(err);
+      return [] as PlanInterface[];
+    }
+  }
+  async selectNamePlanByID(id: number): Promise<string> {
+    const query = "SELECT name FROM tb_plans WHERE id = ?";
+    try {
+      const conexao = await new DB().getConexao();
+      const [result] = await conexao.query<RowDataPacket[]>(query, [id]);
+
+      if (result.length > 0) {
+        return result[0].name; 
+      } else {
+        return "N/A"; 
+      }
+    } catch (err) {
+      console.log(err);
+      return "Erro ao buscar nome do plano"; 
+    }
   }
 
   async updatePlan(

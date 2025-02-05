@@ -1,14 +1,13 @@
 import { Router, Request, Response } from "express";
 import PlanRepository from "../components/plan/planRepository"; // Repositório de planos
 import Plan from "../components/plan/Plan"; // Modelo de plano
-import jwt from "jsonwebtoken";
+
 import path from "path";
 
 const router = Router();
 const envPath = path.resolve(__dirname, "../.env");
 require("dotenv").config({ path: envPath });
 
-const SECRET = process.env.SECRET_KEY_JWT || "";
 
 
 // Buscar todos os planos
