@@ -1,7 +1,10 @@
 import express, { Request, Response } from "express";
 
+import countryRoutes from "./routes/routeCountry";
+import planRoutes from "./routes/routePlan";
 import userRoutes from "./routes/routeUser";
-import empresaRoutes from "./routes/routeEmpresa";
+import tenantRoutes from "./routes/routeTenant";
+import statusRoutes from "./routes/routeStatus";
 
 import path from "path";
 
@@ -16,8 +19,11 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
 
+app.use("/countries", countryRoutes);
 app.use("/users", userRoutes);
-app.use("/companies", empresaRoutes);
+app.use("/plans", planRoutes);
+app.use("/tenants", tenantRoutes);
+app.use("/status", statusRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("GET feito com sucesso!");
